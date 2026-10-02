@@ -1,0 +1,54 @@
+name: Docker Compose Smoke Test
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'docker-compose.yml'
+      - 'llm-multiroute/**'
+      - 'llm-frontend-python/**'
+      - '.github/workflows/docker-compose-smoke.yml'
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'docker-compose.yml'
+      - 'llm-multiroute/**'
+      - 'llm-frontend-python/**'
+      - '.github/workflows/docker-compose-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compose-smoke-test:
+    name: Build and run Compose stack
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and start containers
+        run: docker compose up --build --detach
+
+      - name: Verify backend and frontend
+        run: |
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://localhost:8080/api/ai/routes >/dev/null \
+              && curl --fail --silent http://localhost:5000/ >/dev/null; then
+              echo "Backend and frontend are responding."
+              exit 0
+            fi
+            echo "Waiting for services ($attempt/30)..."
+            sleep 5
+          done
+          echo "Services did not become ready in time."
+          docker compose logs
+          exit 1
+
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose logs
+
+      - name: Stop containers
+        if: always()
+        run: docker compose down --volumes

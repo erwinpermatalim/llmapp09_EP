@@ -19,6 +19,9 @@ env:
   OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
   OLLAMA_BASE_URL: ${{ secrets.OLLAMA_BASE_URL }}
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  LANGFUSE_PUBLIC_KEY: ${{ secrets.LANGFUSE_PUBLIC_KEY }}
+  LANGFUSE_SECRET_KEY: ${{ secrets.LANGFUSE_SECRET_KEY }}
+  LANGFUSE_HOST: ${{ secrets.LANGFUSE_HOST }}
 
 jobs:
   deepeval:
