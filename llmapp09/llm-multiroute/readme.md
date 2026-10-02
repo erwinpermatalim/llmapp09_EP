@@ -45,10 +45,10 @@
 │ OLLAMA_TEMPERATURE    = 0.7                                              │
 │                                                                          │
 │ # Per-route model assignments (the core multi-route feature)             │
-│ OLLAMA_MODEL_CLASSIFY  = gemma3:4b                                       │
-│ OLLAMA_MODEL_SENTIMENT = llama3.2                                        │
-│ OLLAMA_MODEL_SUMMARIZE = mistral                                         │
-│ OLLAMA_MODEL_INTENT    = qwen2.5                                         │
+│ OLLAMA_MODEL_CLASSIFY  = gemma4:31b                                      │
+│ OLLAMA_MODEL_SENTIMENT = gpt-oss:20b                                     │
+│ OLLAMA_MODEL_SUMMARIZE = gpt-oss:120b                                    │
+│ OLLAMA_MODEL_INTENT    = nemotron-3-nano:30b                             │
 │                                                                          │
 │ 3. app/router/model_router.py — Task-to-Model Router                     │
 │                                                                          │

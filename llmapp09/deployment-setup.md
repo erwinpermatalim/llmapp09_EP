@@ -7,6 +7,19 @@
 3. `OPENAI_API_KEY` is used by `deepeval-tests` as the evaluation judge, not by the application containers. To run those tests from a terminal, export the values from `.env` into that shell before running DeepEval.
 4. Hugging Face keys (`HF_TOKEN` / `HUGGINGFACEHUB_API_TOKEN`) are not currently read anywhere in this repository. Don't add them to the container or GitHub unless a Hugging Face integration is added.
 
+## Ollama model routing
+
+The current defaults are `gemma4:31b` for classification, `gpt-oss:20b` for sentiment, `gpt-oss:120b` for summarization, and `nemotron-3-nano:30b` for intent detection. All six selected Ollama models can be assigned to any task by setting `OLLAMA_MODEL_CLASSIFY`, `OLLAMA_MODEL_SENTIMENT`, `OLLAMA_MODEL_SUMMARIZE`, or `OLLAMA_MODEL_INTENT` in the root `.env` file:
+
+- `gemma4:31b`
+- `gpt-oss:120b`
+- `gpt-oss:20b`
+- `nemotron-3-nano:30b`
+- `nemotron-3-super`
+- `nemotron-3-ultra`
+
+The Compose service receives these variables when it starts; restart/recreate the backend after changing them.
+
 ## Build and run locally
 
 Install and start Docker Desktop, then from the repository root run:
