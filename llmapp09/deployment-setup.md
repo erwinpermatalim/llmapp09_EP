@@ -28,10 +28,10 @@ For live Promptfoo/DeepEval workflows, add these under **Repository → Settings
 - `OPENAI_API_KEY` — required only by DeepEval's judge model.
 - `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY` — optional Langfuse tracing credentials; `LANGFUSE_HOST` is optional and defaults to `https://cloud.langfuse.com`.
 
-The existing Docker Hub publishing workflows also require `DOCKERHUB_TOKEN` for the configured Docker Hub account. Their image namespace and login username are currently hard-coded to `darryl1975`; change those workflow values if publishing to a different Docker Hub account. Hugging Face secrets are not needed by the current code.
+The Docker Hub publishing workflows use the `erwinpermatalim` namespace and require a Docker Hub access token stored as the `DOCKERHUB_TOKEN` repository secret. Hugging Face secrets are not needed by the current code.
 
 Secrets are not available to workflows triggered from forks, so live model-evaluation jobs may fail on forked pull requests. The Docker Compose smoke workflow remains secret-free.
 
 ## Push to your GitHub repository
 
-The current Git remote is `https://github.com/darryl1975/DOAIS.git`. Confirm that this is the intended repository and that you have permission to push. If you created a different personal repository, point `origin` to that repository before pushing. Commit only source/configuration templates (never `.env`), then push the intended branch; pushing to `main` or `master` triggers the workflows above.
+The current Git remote is `https://github.com/erwinpermatalim/llmapp09_EP.git`. Commit only source/configuration templates (never `.env`), then push the intended branch; pushing to `main` triggers the workflows above.
