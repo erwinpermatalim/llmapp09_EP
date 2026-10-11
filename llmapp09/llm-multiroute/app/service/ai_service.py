@@ -10,7 +10,7 @@ from app.dto.sentiment_response import SentimentResponse
 from app.dto.summary_response import SummaryResponse
 from app.guardrails import guardrails_engine
 from app.monitoring import metrics_store
-from app.router.model_router import TaskType, model_router
+from app.router.model_router import ModelRouter, TaskType, model_router
 
 langfuse = get_client()
 
@@ -19,7 +19,7 @@ class AIService:
     def __init__(
         self,
         http_client: httpx.Client | None = None,
-        router: "ModelRouter | None" = None,
+        router: ModelRouter | None = None,
     ):
         self.http_client = http_client or httpx.Client(timeout=120.0)
         self.base_url = settings.OLLAMA_BASE_URL
@@ -81,7 +81,11 @@ class AIService:
             '{"labels": ["label1", "label2"], "primaryCategory": "category", "confidence": 0.9}'
         )
         response = self._chat(prompt, model, task_type="classify")
-        return guardrails_engine.validate_output(response, ClassificationResponse, task_type="classify")
+        return guardrails_engine.validate_output(
+            response,
+            ClassificationResponse,
+            task_type="classify",
+        )
 
     def analyze_sentiment(self, text: str) -> SentimentResponse:
         model = self.router.get_model(TaskType.SENTIMENT)
@@ -114,7 +118,11 @@ class AIService:
             '"emotions": ["emotion1", "emotion2"], "confidence": 0.9}'
         )
         response = self._chat(prompt, model, task_type="sentiment")
-        return guardrails_engine.validate_output(response, SentimentResponse, task_type="sentiment")
+        return guardrails_engine.validate_output(
+            response,
+            SentimentResponse,
+            task_type="sentiment",
+        )
 
     def summarize_text(self, text: str) -> SummaryResponse:
         model = self.router.get_model(TaskType.SUMMARIZE)
@@ -126,7 +134,11 @@ class AIService:
             '{"summary": "your summary here", "keyPoints": ["point1", "point2", "point3"], "wordCount": 25}'
         )
         response = self._chat(prompt, model, task_type="summarize")
-        return guardrails_engine.validate_output(response, SummaryResponse, task_type="summarize")
+        return guardrails_engine.validate_output(
+            response,
+            SummaryResponse,
+            task_type="summarize",
+        )
 
     def detect_intent(self, text: str) -> IntentResponse:
         model = self.router.get_model(TaskType.INTENT)
@@ -156,4 +168,8 @@ class AIService:
             '"intentCategory": "question", "confidence": 0.9}'
         )
         response = self._chat(prompt, model, task_type="intent")
-        return guardrails_engine.validate_output(response, IntentResponse, task_type="intent")
+        return guardrails_engine.validate_output(
+            response,
+            IntentResponse,
+            task_type="intent",
+        )
