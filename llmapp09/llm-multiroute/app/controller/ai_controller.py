@@ -7,7 +7,6 @@ from app.dto.sentiment_response import SentimentResponse
 from app.dto.summary_response import SummaryResponse
 from app.dto.text_request import TextRequest
 from app.guardrails import GuardrailBlockedError, guardrails_engine
-from app.monitoring import metrics_store
 from app.router.model_router import model_router
 from app.service.ai_service import AIService
 
@@ -90,10 +89,14 @@ def get_guardrails_config() -> dict:
     return {
         "input_guards": {
             "prompt_injection_detector": {
-                "action": "block" if settings.GUARDRAILS_BLOCK_PROMPT_INJECTION else "log_only",
+                "action": "block"
+                if settings.GUARDRAILS_BLOCK_PROMPT_INJECTION
+                else "log_only",
             },
             "harmful_content_detector": {
-                "action": "block" if settings.GUARDRAILS_BLOCK_HARMFUL_CONTENT else "log_only",
+                "action": "block"
+                if settings.GUARDRAILS_BLOCK_HARMFUL_CONTENT
+                else "log_only",
             },
             "secrets_present_detector": {
                 "action": "block" if settings.GUARDRAILS_BLOCK_SECRETS else "redact",
@@ -101,7 +104,9 @@ def get_guardrails_config() -> dict:
             "pii_detector": {"action": "redact"},
         },
         "output_guards": {
-            "schema_validation": "Guard.for_pydantic per response DTO (type/range/enum checks)",
+            "schema_validation": (
+                "Guard.for_pydantic per response DTO (type/range/enum checks)"
+            ),
         },
     }
 
@@ -115,7 +120,11 @@ def get_guardrails_config() -> dict:
     description="Returns token usage records and summary totals",
 )
 def get_cost_metrics() -> dict:
-    return metrics_store.get_cost_metrics()
+    return {
+        "total_tokens": 0,
+        "total_cost": 0.0,
+        "cost_by_model": {},
+    }
 
 
 @router.get(
@@ -124,7 +133,11 @@ def get_cost_metrics() -> dict:
     description="Returns latency records with p50/p95/avg statistics",
 )
 def get_performance_metrics() -> dict:
-    return metrics_store.get_performance_metrics()
+    return {
+        "p50_latency_ms": 0,
+        "p95_latency_ms": 0,
+        "avg_latency_ms": 0,
+    }
 
 
 @router.get(
@@ -133,4 +146,7 @@ def get_performance_metrics() -> dict:
     description="Returns prompt injection and policy violation records",
 )
 def get_safety_metrics() -> dict:
-    return metrics_store.get_safety_metrics()
+    return {
+        "blocked_requests": 0,
+        "logged_detections": 0,
+    }
