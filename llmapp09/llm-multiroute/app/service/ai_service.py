@@ -10,15 +10,16 @@ from app.dto.sentiment_response import SentimentResponse
 from app.dto.summary_response import SummaryResponse
 from app.guardrails import guardrails_engine
 from app.monitoring import metrics_store
-from app.router.model_router import ModelRouter, TaskType, model_router
+from app.router.model_router import TaskType, model_router
 
 langfuse = get_client()
+
 
 class AIService:
     def __init__(
         self,
         http_client: httpx.Client | None = None,
-        router: ModelRouter | None = None,
+        router: "ModelRouter | None" = None,
     ):
         self.http_client = http_client or httpx.Client(timeout=120.0)
         self.base_url = settings.OLLAMA_BASE_URL
