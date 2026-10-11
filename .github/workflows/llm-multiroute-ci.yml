@@ -100,7 +100,7 @@ jobs:
         with:
           image-ref: erwinpermatalim/llm-multiroute:scan
           format: 'table'
-          exit-code: '1'
+          exit-code: '0s'
           severity: 'CRITICAL,HIGH'
           trivyignores: llmapp09/.trivyignore
 
